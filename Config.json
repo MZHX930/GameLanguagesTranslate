@@ -1,0 +1,19 @@
+{
+    "channels": {
+        "百度": {
+            "AppID": "baidu_api_key",
+            "api_key": "baidu_api_key",
+            "api_url": "https://api.baidu.com/translate"
+        },
+        "有道": {
+            "api_key": "youdao_api_key",
+            "api_url": "https://api.youdao.com/translate"
+        },
+        "谷歌": {
+            "api_key": "google_api_key",
+            "api_url": "https://api.google.com/translate"
+        }
+    },
+    "default_language": "ChineseSimplified",
+    "xlsx_path": "G:/WorkProject4/RumblePack/rumblepack-plan/Language/Language.xlsx"
+}

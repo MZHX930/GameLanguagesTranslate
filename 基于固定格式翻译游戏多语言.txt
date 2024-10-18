@@ -1,0 +1,8 @@
+xlsx的格式：
+Key #备注 ChineseSimplified   ChineseTraditional  English
+
+
+Cursor提示词：
+1.
+先创建一个面板，第一行是一个按钮“选择”，按钮功能是点击后选择一个xlsx文件
+检测xlsx的第一个标签页，如果符合xlsx格式，则将第一行的内容显示
