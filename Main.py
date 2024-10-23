@@ -1,4 +1,5 @@
 # coding: utf-8
+import asyncio
 import tkinter as tk
 from tkinter import filedialog
 import ParseConfig
@@ -6,7 +7,6 @@ import LanguageXlsxTool
 import BaiduTranslate
 
 # 翻译结果
-translate_results = {}
 translate_result_components = {}
 
 
@@ -20,22 +20,32 @@ def select_file():
         path_label.config(text=f"XLSX路径: {file_path}")
 
 
-def translate_word(word, selected_channel):
-    translate_results = {}
-    # 根据用户选择的渠道调用对应的脚本
+async def translate_word_async(word, selected_channel, root):
     selected_index = selected_channel.get()
     for index, language in enumerate(translate_languages):
-        translate_results[language] = "{}_{}".format(word, index)
+        # 调用异步翻译函数
+        result = await BaiduTranslate.translate_text_async(word, to_lang="en")
+        translated_text = result
         translate_result_components[language].config(state="normal")
         translate_result_components[language].delete("1.0", tk.END)
-        translate_result_components[language].insert("1.0", translate_results[language])
+        translate_result_components[language].insert("1.0", translated_text)
         translate_result_components[language].config(state="disabled")
-        # BaiduTranslate.translate_text(word, language)
-        print("{}_{}".format(word, index))
+
+        # 强制更新UI
+        root.update()
+
+        # 等待1秒
+        await asyncio.sleep(1)
+
+
+def translate_word(word, selected_channel, root):
+    # 使用 asyncio.run 来运行异步函数
+    asyncio.run(translate_word_async(word, selected_channel, root))
 
 
 def create_ui():
     """创建800x800的UI界面"""
+    global root
     root = tk.Tk()
     root.title("游戏多语言翻译")  # 设置窗口标题
     root.geometry("800x800")
@@ -83,7 +93,7 @@ def create_ui():
     btnTranlate = tk.Button(
         translate_frame,
         text="翻译",
-        command=lambda: translate_word(inputFiled.get(), selected_channel),
+        command=lambda: translate_word(inputFiled.get(), selected_channel, root),
     )
     btnTranlate.pack(side="top", anchor="n", pady=5)
 
@@ -99,10 +109,7 @@ def create_ui():
     # 创建文本框和滚动条
     for index, language in enumerate(translate_languages):
         text_widget = tk.Text(result_frame, height=1, width=50)
-        if language in translate_results:
-            text_widget.insert("1.0", translate_results[language])  # """插入文本"""
-        else:
-            text_widget.insert("1.0", "")  # """插入文本"""
+        text_widget.insert("1.0", "")  # 初始文本
         text_widget.config(state="disabled")  # 只读模式
         text_widget.grid(row=index, column=1, sticky="w", padx=5, pady=2)
         translate_result_components[language] = text_widget
