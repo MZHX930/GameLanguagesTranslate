@@ -1,3 +1,4 @@
+from ast import If
 import aiohttp
 import hashlib
 import random
@@ -6,6 +7,39 @@ from typing import Any, Dict
 from rsa import sign
 from urllib.parse import quote
 import json
+import langcodes
+import ParseConfig
+
+
+# 常用语种列表
+language_code_dic = {
+    "Korean": "kor",  # 韩语
+    "Thai": "th",  # 泰语
+    "Portuguese": "pt",  # 葡萄牙语
+    "PortugueseBrazil": "pt",  # 葡萄牙语
+    "Greek": "el",  # 希腊语
+    "Bulgarian": "bul",  # 保加利亚语
+    "Finnish": "fin",  # 芬兰语
+    "ChineseTraditional": "cht",  # 繁体中文
+    "French": "fra",  # 法语
+    "Arabic": "ara",  # 阿拉伯语
+    "German": "de",  # 德语
+    "Dutch": "nl",  # 荷兰语
+    "Czech": "cs",  # 捷克语
+    "Swedish": "swe",  # 瑞典语
+    "Vietnamese": "vie",  # 越南语
+    "English": "en",  # 英语
+    "Japanese": "jpn",  # 日语
+    "Spanish": "spa",  # 西班牙语
+    "Russian": "ru",  # 俄语
+    "Italian": "it",  # 意大利语
+    "Polish": "pl",  # 意大利语
+    "Danish": "dan",  # 丹麦语
+    "Hungarian": "hu",  # 匈牙利语
+}
+
+# 脚本初始化时加载配置
+appid, appkey = ParseConfig.get_channel_params("BaiDu")
 
 
 # Generate salt and sign
@@ -20,13 +54,18 @@ async def translate_text_async(
     # query = quote(query)
     # print("请求翻译：" + query)
 
-    # Set your own appid/appkey.
-    appid = "20241017002178166"
-    appkey = "ftzW2C9rkCVyDeeHDR8B"
+    # # Set your own appid/appkey.
+    # ParseConfig.get_channel_params("BaiDu")
+    # appid = "20241017002178166"
+    # appkey = "ftzW2C9rkCVyDeeHDR8B"
 
     # For list of language codes, please refer to `https://api.fanyi.baidu.com/doc/21`
     from_lang = "zh"
-    # to_lang = "en"
+
+    if to_lang in language_code_dic:
+        to_lang = language_code_dic[to_lang]
+    else:
+        return f"无法解析语言: {to_lang}"
 
     endpoint = "http://api.fanyi.baidu.com"
     path = "/api/trans/vip/translate"
@@ -70,3 +109,16 @@ async def translate_text_async(
 
 # 在主程序中调用异步函数
 # asyncio.run(translate_text_async("Hello", "your_app_id", "your_secret_key"))
+
+
+async def initialize_baidu_translator():
+    """初始化百度翻译器"""
+    global appid, appkey
+    if not appid or not appkey:
+        print("错误：百度翻译 AppID 或 AppKey 未配置")
+        return False
+    return True
+
+
+# 在主程序开始时调用此函数
+# asyncio.run(initialize_baidu_translator())

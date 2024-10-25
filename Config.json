@@ -1,17 +1,16 @@
 {
     "channels": {
-        "百度": {
-            "AppID": "baidu_api_key",
-            "api_key": "baidu_api_key",
-            "api_url": "https://api.baidu.com/translate"
+        "BaiDu": {
+            "AppID": "20241017002178166",
+            "AppKey": "ftzW2C9rkCVyDeeHDR8B"
         },
-        "有道": {
-            "api_key": "youdao_api_key",
-            "api_url": "https://api.youdao.com/translate"
+        "YouDao": {
+            "AppID": "AppID",
+            "AppKey": "AppKey"
         },
-        "谷歌": {
-            "api_key": "google_api_key",
-            "api_url": "https://api.google.com/translate"
+        "GuGe": {
+            "AppID": "AppID",
+            "AppKey": "AppKey"
         }
     },
     "default_language": "ChineseSimplified",

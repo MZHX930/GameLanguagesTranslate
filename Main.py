@@ -24,7 +24,7 @@ async def translate_word_async(word, selected_channel, root):
     selected_index = selected_channel.get()
     for index, language in enumerate(translate_languages):
         # 调用异步翻译函数
-        result = await BaiduTranslate.translate_text_async(word, to_lang="en")
+        result = await BaiduTranslate.translate_text_async(word, to_lang=language)
         translated_text = result
         translate_result_components[language].config(state="normal")
         translate_result_components[language].delete("1.0", tk.END)
